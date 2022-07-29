@@ -38,6 +38,8 @@ class RoleCrudController extends CrudController
 
     public function setupListOperation()
     {
+        $this->authorize('browse', config('backpack.permissionmanager.models.role'));
+
         /**
          * Show a column for the name of the role.
          */
@@ -97,6 +99,8 @@ class RoleCrudController extends CrudController
 
     public function setupCreateOperation()
     {
+        $this->authorize('create', config('backpack.permissionmanager.models.role'));
+
         $this->addFields();
         $this->crud->setValidation(StoreRequest::class);
 
@@ -106,6 +110,9 @@ class RoleCrudController extends CrudController
 
     public function setupUpdateOperation()
     {
+       $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+
+
         $this->addFields();
         $this->crud->setValidation(UpdateRequest::class);
 
@@ -157,5 +164,10 @@ class RoleCrudController extends CrudController
         }
 
         return $returnable;
+    }
+
+    public function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

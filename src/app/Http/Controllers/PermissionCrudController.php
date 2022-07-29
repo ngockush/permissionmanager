@@ -38,6 +38,7 @@ class PermissionCrudController extends CrudController
 
     public function setupListOperation()
     {
+        $this->authorize('browse', config('backpack.permissionmanager.models.role'));
         $this->crud->addColumn([
             'name'  => 'name',
             'label' => trans('backpack::permissionmanager.name'),
@@ -55,6 +56,7 @@ class PermissionCrudController extends CrudController
 
     public function setupCreateOperation()
     {
+        $this->authorize('create', config('backpack.permissionmanager.models.role'));
         $this->addFields();
         $this->crud->setValidation(StoreRequest::class);
 
@@ -64,6 +66,8 @@ class PermissionCrudController extends CrudController
 
     public function setupUpdateOperation()
     {
+       $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+
         $this->addFields();
         $this->crud->setValidation(UpdateRequest::class);
 
@@ -105,5 +109,10 @@ class PermissionCrudController extends CrudController
         }
 
         return $returnable;
+    }
+
+    public function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

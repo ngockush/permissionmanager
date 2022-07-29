@@ -17,6 +17,12 @@ return [
         'role'       => Backpack\PermissionManager\app\Models\Role::class,
     ],
 
+    'policies' => [
+        'user'       => \App\Policies\UserPolicy::class,
+        'permission' => \App\Policies\PermissionPolicy::class,
+        'role'       => \App\Policies\RolePolicy::class,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Disallow the user interface for creating/updating permissions or roles.

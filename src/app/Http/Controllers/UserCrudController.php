@@ -23,6 +23,8 @@ class UserCrudController extends CrudController
 
     public function setupListOperation()
     {
+        $this->authorize('browse', config('backpack.permissionmanager.models.user'));
+
         $this->crud->addColumns([
             [
                 'name'  => 'name',
@@ -87,12 +89,16 @@ class UserCrudController extends CrudController
 
     public function setupCreateOperation()
     {
+        $this->authorize('create', config('backpack.permissionmanager.models.user'));
+
         $this->addUserFields();
         $this->crud->setValidation(StoreRequest::class);
     }
 
     public function setupUpdateOperation()
     {
+        $this->authorize('update', config('backpack.permissionmanager.models.user'));
+
         $this->addUserFields();
         $this->crud->setValidation(UpdateRequest::class);
     }
@@ -198,5 +204,10 @@ class UserCrudController extends CrudController
                 ],
             ],
         ]);
+    }
+
+    public function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

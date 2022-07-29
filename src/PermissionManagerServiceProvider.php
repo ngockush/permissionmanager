@@ -2,8 +2,10 @@
 
 namespace Backpack\PermissionManager;
 
+use Backpack\PermissionManager\app\Models\Permission;
+use Backpack\PermissionManager\app\Models\Role;
 use Illuminate\Routing\Router;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
 class PermissionManagerServiceProvider extends ServiceProvider
@@ -23,32 +25,43 @@ class PermissionManagerServiceProvider extends ServiceProvider
     public $routeFilePath = '/routes/backpack/permissionmanager.php';
 
     /**
+     * Get the policies defined on the provider.
+     *
+     * @return array
+     */
+    public function policies()
+    {
+        return [
+            config('backpack.permissionmanager.models.permission') => config('backpack.permissionmanager.policies.permission'),
+            config('backpack.permissionmanager.models.role') => config('backpack.permissionmanager.policies.role'),
+            config('backpack.permissionmanager.models.user') => config('backpack.permissionmanager.policies.user'),
+        ];
+    }
+
+
+    /**
      * Perform post-registration booting of services.
      *
      * @return void
      */
     public function boot()
     {
+        $this->registerPolicies();
+
         // define the routes for the application
         $this->setupRoutes($this->app->router);
 
-        // use the vendor configuration file as fallback
-        $this->mergeConfigFrom(
-            __DIR__.'/config/backpack/permissionmanager.php',
-            'backpack.permissionmanager'
-        );
-
         // publish config file
-        $this->publishes([__DIR__.'/config' => config_path()], 'config');
+        $this->publishes([__DIR__ . '/config' => config_path()], 'config');
 
         // publish translation files
-        $this->publishes([__DIR__.'/resources/lang' => app()->langPath().'/vendor/backpack'], 'lang');
+        $this->publishes([__DIR__ . '/resources/lang' => app()->langPath() . '/vendor/backpack'], 'lang');
 
         // publish route file
-        $this->publishes([__DIR__.$this->routeFilePath => base_path($this->routeFilePath)], 'routes');
+        $this->publishes([__DIR__ . $this->routeFilePath => base_path($this->routeFilePath)], 'routes');
 
         // publish migration from Backpack 4.0 to Backpack 4.1
-        $this->publishes([__DIR__.'/database/migrations' => database_path('migrations')], 'migrations');
+        $this->publishes([__DIR__ . '/database/migrations' => database_path('migrations')], 'migrations');
     }
 
     /**
@@ -61,11 +74,11 @@ class PermissionManagerServiceProvider extends ServiceProvider
     public function setupRoutes(Router $router)
     {
         // by default, use the routes file provided in vendor
-        $routeFilePathInUse = __DIR__.$this->routeFilePath;
+        $routeFilePathInUse = __DIR__ . $this->routeFilePath;
 
         // but if there's a file with the same name in routes/backpack, use that one
-        if (file_exists(base_path().$this->routeFilePath)) {
-            $routeFilePathInUse = base_path().$this->routeFilePath;
+        if (file_exists(base_path() . $this->routeFilePath)) {
+            $routeFilePathInUse = base_path() . $this->routeFilePath;
         }
 
         $this->loadRoutesFrom($routeFilePathInUse);
@@ -78,6 +91,12 @@ class PermissionManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // use the vendor configuration file as fallback
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/backpack/permissionmanager.php',
+            'backpack.permissionmanager'
+        );
+
         $this->app->register(PermissionServiceProvider::class);
     }
 }
