@@ -97,7 +97,7 @@ class UserCrudController extends CrudController
 
     public function setupUpdateOperation()
     {
-        $this->authorize('update', config('backpack.permissionmanager.models.user'));
+        $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
 
         $this->addUserFields();
         $this->crud->setValidation(UpdateRequest::class);
@@ -208,6 +208,6 @@ class UserCrudController extends CrudController
 
     public function setupDeleteOperation()
     {
-        $this->authorize('delete', $this->crud->entry);
+        $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
     }
 }

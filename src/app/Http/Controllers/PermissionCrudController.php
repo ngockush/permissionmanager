@@ -113,6 +113,6 @@ class PermissionCrudController extends CrudController
 
     public function setupDeleteOperation()
     {
-        $this->authorize('delete', $this->crud->entry);
+        $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
     }
 }
