@@ -1,5 +1,5 @@
 {
-    "name": "backpack/permissionmanager",
+    "name": "ngockush/permissionmanager",
     "description": "Users and permissions management interface for Laravel 5 using Backpack CRUD.",
     "keywords": [
         "tabacitu",
@@ -16,8 +16,7 @@
     ],
     "homepage": "https://github.com/laravel-backpack/permissionmanager",
     "license": "proprietary",
-    "authors": [
-        {
+    "authors": [{
             "name": "Marius Constantin",
             "email": "marius@updivision.com",
             "homepage": "http://www.updivision.com",
@@ -37,7 +36,7 @@
         "backpack/crud": "^5.0"
     },
     "require-dev": {
-        "phpunit/phpunit" : "^9.0||^7.0",
+        "phpunit/phpunit": "^9.0||^7.0",
         "scrutinizer/ocular": "~1.1"
     },
     "autoload": {
